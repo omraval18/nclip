@@ -1,0 +1,21 @@
+{
+  "name": "nclip",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd server && bun run dev\" \"cd web && bun run dev\"",
+    "build": "cd server && bun run build && cd ../web && bun run build",
+    "start": "concurrently \"cd server && bun run start\" \"cd web && bun run serve\"",
+    "check-types": "cd server && bun run check-types && cd ../web && bun run check-types"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

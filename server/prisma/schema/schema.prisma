@@ -1,0 +1,65 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model Projects {
+  id          String   @id
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  uploadedFile UploadedFile?
+  @@map("projects")
+}
+
+model UploadedFile {
+  id          String   @id @default(cuid())
+  r2Key       String @unique
+  displayName String?
+  uploaded    Boolean  @default(false)
+  status      Status   @default(queued)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  clips Clip[]
+
+  project   Projects  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String   @unique
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([r2Key])
+}
+
+model Clip {
+  id    String @id @default(cuid())
+  r2Key String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  uploadedFile   UploadedFile? @relation(fields: [uploadedFileId], references: [id], onDelete: Cascade)
+  uploadedFileId String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([r2Key])
+}
+
+enum Status {
+  queued
+  processing
+  completed
+  failed
+}
