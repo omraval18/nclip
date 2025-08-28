@@ -8,18 +8,23 @@ import { clipRoutes } from "./routers/clip.routes";
 import { serve } from "inngest/hono";
 import { functions, inngest } from "./lib/inngest";
 import { projectRoutes } from "./routers/project.routes";
-import { env } from "bun";
+import { env } from "./env";
 
 const app = new Hono<{
 	Variables: AuthType
 }>();
 
-app.use(logger());
+if (env.NODE_ENV === "development") {
+  app.use(logger());
+}
 
-console.log("CORS_ORIGIN:", env.CORS_ORIGIN);
+if (env.NODE_ENV === "development") {
+  console.log("CORS_ORIGIN:", env.CORS_ORIGIN);
+}
+
 app.use("/*", cors({
-  origin: env.CORS_ORIGIN || "",
-  allowMethods: ["GET", "POST", "OPTIONS"],
+  origin: env.CORS_ORIGIN,
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
@@ -32,7 +37,9 @@ app.use("*", async (c, next) => {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
     if (!session) {
-        console.error("No session found, user is not authenticated");
+        if (env.NODE_ENV === "development") {
+          console.error("No session found, user is not authenticated");
+        }
         c.set("user", null);
         c.set("session", null);
         return next();

@@ -19,7 +19,7 @@ export const env = createEnv({
     OPENROUTER_API_KEY: z.string().min(1),
     PROCESS_VIDEO_ENDPOINT_AUTH: z.string().min(1),
     PROCESS_VIDEO_ENDPOINT: z.string().min(1),
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    NODE_ENV: z.enum(["development", "production", "test"]).default("production"),
     R2_REGION: z.string().default("auto"),
     R2_BUCKET_NAME: z.string().default("nclip"),
     BASE_API: z.string().url(),

@@ -11,6 +11,4 @@ export const db =
     log: ["query", "error", "warn"],
   });
 
-console.log("Postgres URL: ", env.DATABASE_URL)
-console.log("Node ENV: ", env.NODE_ENV)
 if (env.NODE_ENV !== "production") globalForPrisma.db = db;

@@ -4,6 +4,7 @@ import { getClips } from "@/services/clips.service";
 import { db } from "@/lib/db";
 import { apiResponseSchema, getClipsQuerySchema, processClipsReqSchema, type ClipsApiResponse } from "@/lib/schema";
 import { canCreateClip, CREDIT_COSTS } from "@/lib/utils";
+import { env } from "@/env";
 
 export async function handleClipGeneration(c: Context) {
     const user = await c.get("user");
@@ -11,7 +12,9 @@ export async function handleClipGeneration(c: Context) {
         return c.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    console.log("Received clip generation request:", c.req);
+    if (env.NODE_ENV === "development") {
+        console.log("Received clip generation request:", c.req);
+    }
 
     const body = await c.req.json();
     const { s3_key, max_clips, projectId } = processClipsReqSchema.parse(body);
