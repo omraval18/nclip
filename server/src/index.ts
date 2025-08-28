@@ -8,14 +8,17 @@ import { clipRoutes } from "./routers/clip.routes";
 import { serve } from "inngest/hono";
 import { functions, inngest } from "./lib/inngest";
 import { projectRoutes } from "./routers/project.routes";
+import { env } from "bun";
 
 const app = new Hono<{
 	Variables: AuthType
 }>();
 
 app.use(logger());
+
+console.log("CORS_ORIGIN:", env.CORS_ORIGIN);
 app.use("/*", cors({
-  origin: process.env.CORS_ORIGIN || "",
+  origin: env.CORS_ORIGIN || "",
   allowMethods: ["GET", "POST", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
   credentials: true,

@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { PrismaClient } from "../../prisma/generated/client";
 
 const globalForPrisma = globalThis as unknown as {
@@ -10,4 +11,6 @@ export const db =
     log: ["query", "error", "warn"],
   });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.db = db;
+console.log("Postgres URL: ", env.DATABASE_URL)
+console.log("Node ENV: ", env.NODE_ENV)
+if (env.NODE_ENV !== "production") globalForPrisma.db = db;

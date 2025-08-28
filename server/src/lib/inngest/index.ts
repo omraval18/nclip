@@ -3,6 +3,7 @@ import { listS3ObjectsByPrefix, objectExists } from "../utils";
 import { db } from "../db";
 import z from "zod";
 import { CREDIT_COSTS } from "@/lib/utils";
+import { env } from "bun";
 
 export const inngest = new Inngest({ id: "process-video" });
 
@@ -67,7 +68,7 @@ const ProcessVideo = inngest.createFunction(
             console.log("Project found: ", project);
             
             const fileExistsInBucket = await objectExists({
-                bucket: process.env.R2_BUCKET_NAME!,
+                bucket: env.R2_BUCKET_NAME!,
                 key: s3_key,
             });
             console.log("File exists in bucket: ", fileExistsInBucket);
@@ -115,8 +116,8 @@ const ProcessVideo = inngest.createFunction(
                 model: "qwen/qwen3-coder",
             };
             
-            const processEndpoint = process.env.PROCESS_VIDEO_ENDPOINT!;
-            const bearer = process.env.PROCESS_VIDEO_ENDPOINT_AUTH!;
+            const processEndpoint = env.PROCESS_VIDEO_ENDPOINT!;
+            const bearer = env.PROCESS_VIDEO_ENDPOINT_AUTH!;
             
             try {
                 console.log("Sending request to process video endpoint: ", processEndpoint);

@@ -6,6 +6,7 @@ import {
     type _Object,
     type ListObjectsV2CommandOutput,
 } from "@aws-sdk/client-s3";
+import { env } from "bun";
 
 export function getFileNameFromRelative(relativePath: string): string {
     return (
@@ -30,11 +31,11 @@ export const isValidationError = (error: unknown): boolean => {
 export async function objectExists(params: { bucket: string; key: string }) {
     const { bucket, key } = params;
     try {
-        const endpoint = process.env.BUCKET_ENDPOINT!;
+        const endpoint = env.BUCKET_ENDPOINT!;
         const s3 = new S3Client({
             credentials: {
-                accessKeyId: process.env.BUCKET_ACCESS_KEY!,
-                secretAccessKey: process.env.BUCKET_ACCESS_SECRET!,
+                accessKeyId: env.BUCKET_ACCESS_KEY!,
+                secretAccessKey: env.BUCKET_ACCESS_SECRET!,
             },
             endpoint,
             region: "us-east-1",
@@ -53,14 +54,14 @@ export async function objectExists(params: { bucket: string; key: string }) {
 }
 
 export async function listS3ObjectsByPrefix(prefix: string): Promise<string[]> {
-    const bucket = process.env.R2_BUCKET_NAME;
-    if (!bucket) throw new Error("process.env.S3_BUCKET_NAME is not set");
+    const bucket = env.R2_BUCKET_NAME;
+    if (!bucket) throw new Error("env.S3_BUCKET_NAME is not set");
 
-    const endpoint = process.env.BUCKET_ENDPOINT!;
+    const endpoint = env.BUCKET_ENDPOINT!;
     const s3 = new S3Client({
         credentials: {
-            accessKeyId: process.env.BUCKET_ACCESS_KEY!,
-            secretAccessKey: process.env.BUCKET_ACCESS_SECRET!,
+            accessKeyId: env.BUCKET_ACCESS_KEY!,
+            secretAccessKey: env.BUCKET_ACCESS_SECRET!,
         },
         endpoint,
         region: "us-east-1",

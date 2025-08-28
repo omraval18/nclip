@@ -5,6 +5,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { listS3ObjectsByPrefix } from "@/lib/utils";
 import { getSignedUrlForKey, r2 } from "@/lib/r2-client";
 import { clipCreateSchema, clipUpdateSchema, type ClipCreateInput, type ClipResponse, type ClipUpdateInput } from "@/lib/schema";
+import { env } from "@/env";
 
 interface GetClipsByProjectType  {
     userId: string;
@@ -143,7 +144,7 @@ export async function getClips({
 
     const uploadedFile = project.uploadedFile;
     const ufKey = uploadedFile.r2Key;
-    const bucket = process.env.R2_BUCKET_NAME!;
+    const bucket = env.R2_BUCKET_NAME!;
     if (!bucket) throw new Error("R2_BUCKET_NAME not set");
 
     const clipsInDB = await db.clip.findMany({

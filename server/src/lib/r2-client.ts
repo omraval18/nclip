@@ -1,16 +1,17 @@
+import { env } from "@/env";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl as awsGetSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 
-const accountId = process.env.R2_ACCOUNT_ID;
+const accountId = env.R2_ACCOUNT_ID;
 
-const endpoint = process.env.BUCKET_ENDPOINT!
+const endpoint = env.BUCKET_ENDPOINT!
 
 
 export const r2 = new S3Client({
     credentials: {
-        accessKeyId: process.env.BUCKET_ACCESS_KEY!,
-        secretAccessKey: process.env.BUCKET_ACCESS_SECRET!,
+        accessKeyId: env.BUCKET_ACCESS_KEY!,
+        secretAccessKey: env.BUCKET_ACCESS_SECRET!,
     },
     endpoint,
     region: "us-east-1",

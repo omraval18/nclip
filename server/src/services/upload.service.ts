@@ -6,6 +6,7 @@ import { r2 } from "@/lib/r2-client";
 import { createProjectWithInitialUpload, getProjectById } from "./project.service";
 import { listS3ObjectsByPrefix } from "@/lib/utils";
 import { createUploadSchema, type CreateUploadInput, type UploadedFileResponse, type UploadUrlResponse } from "@/lib/schema";
+import { env } from "@/env";
 
 type GenerateUploadParams = {
   userId: string;
@@ -48,7 +49,7 @@ export async function generateUploadUrl({
   });
 
   const command = new PutObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME,
+    Bucket: env.R2_BUCKET_NAME,
     Key: key,
     ContentType: "application/octet-stream",
   });
