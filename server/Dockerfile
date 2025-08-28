@@ -4,14 +4,27 @@ WORKDIR /app
 
 # Stage 2: Dependencies
 FROM base AS deps
+WORKDIR /app
+
 COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile --production
+
+ENV BUN_RUNTIME_MAX_MEMORY_HEAP=512000000
+RUN bun install --frozen-lockfile --production --no-cache
 
 # Stage 3: Builder
 FROM base AS builder
+WORKDIR /app
+
 COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile
+
+ENV BUN_RUNTIME_MAX_MEMORY_HEAP=512000000
+ENV PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING=1
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+  bun install --frozen-lockfile --no-cache || \
+  (sleep 5 && bun install --frozen-lockfile --no-cache)
+
 COPY . .
+
 RUN bun run db:generate
 
 RUN bun run build
@@ -20,10 +33,12 @@ RUN bun run build
 FROM base AS production
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl dnsutils && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends curl dnsutils && \
+  rm -rf /var/lib/apt/lists/*
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 bunjs
+RUN addgroup --system --gid 1001 nodejs && \
+  adduser --system --uid 1001 bunjs
 
 COPY --from=deps --chown=bunjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=bunjs:nodejs /app/dist ./dist
