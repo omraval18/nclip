@@ -42,8 +42,7 @@ jobs:
       - name: Deploy to DO App Platform
         uses: digitalocean/app_action/deploy@v2
         env:
-          IMAGE_DIGEST_OMRAVAL_18_NCLIP_SERVER: ${{ steps.push.outputs.digest }}
+          IMAGE_DIGEST_OMRAVAL_18_NCLIP_SERVER: ${{ steps.build.outputs.digest }}
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           app_name: nclip-server
-
