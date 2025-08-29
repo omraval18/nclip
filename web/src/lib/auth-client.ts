@@ -1,7 +1,6 @@
 import { createAuthClient } from "better-auth/react";
 import { inferAdditionalFields } from "better-auth/client/plugins";
-import { env } from "process";
-
+import { env } from "./env";
 
 export const authClient = createAuthClient({
   baseURL: env.VITE_BASE_API,
