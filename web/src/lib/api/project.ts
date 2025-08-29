@@ -1,5 +1,6 @@
 import { projectApiResponseSchema, type ProjectClip, type ProjectOwner, type ProjectResponse, type ProjectsListResponse, type ProjectUpdateInput } from "@/lib/schema/project";
 import type { UploadedFile } from "@/lib/types/db";
+import { env } from "../env";
 
 export type Project = ProjectResponse;
 export type ProjectsList = ProjectsListResponse;
@@ -7,7 +8,7 @@ export { type ProjectOwner, type ProjectClip, type UploadedFile, type ProjectUpd
 
 export async function fetchProject(projectId: string): Promise<Project> {
     if (!projectId) throw new Error("projectId is required");
-    const res = await fetch(`${import.meta.env.BASE_API!}/api/project/${encodeURIComponent(projectId)}`, {
+    const res = await fetch(`${env.VITE_BASE_API}/api/project/${encodeURIComponent(projectId)}`, {
         credentials: "include",
         headers: { Accept: "application/json" },
     });
@@ -25,7 +26,7 @@ export async function fetchProject(projectId: string): Promise<Project> {
 }
 
 export async function fetchProjects(): Promise<ProjectsList[]> {
-    const res = await fetch(`${import.meta.env.BASE_API!}/api/projects`, {
+    const res = await fetch(`${env.VITE_BASE_API}/api/projects`, {
         credentials: "include",
         headers: { Accept: "application/json" },
     });
@@ -48,7 +49,7 @@ export async function fetchProjects(): Promise<ProjectsList[]> {
 export async function updateProject(projectId: string, data: ProjectUpdateInput): Promise<Project> {
     if (!projectId) throw new Error("projectId is required");
     const res = await fetch(
-        `${import.meta.env.BASE_API!}/api/project/${encodeURIComponent(projectId)}`,
+        `${env.VITE_BASE_API}/api/project/${encodeURIComponent(projectId)}`,
         {
             method: "PUT",
             credentials: "include",

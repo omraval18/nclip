@@ -8,7 +8,7 @@ export const Route = createFileRoute('/project/$projectId')({
   component: RouteComponent,
   loader: async ({ params }) => {
       // const id = params.projectId
-      // await fetch(`${import.meta.env.BASE_API!}/api/upload/status/revalidate/${id}`, {
+      // await fetch(`${env.VITE_BASE_API}/api/upload/status/revalidate/${id}`, {
       //   credentials: 'include',
       // })
   },

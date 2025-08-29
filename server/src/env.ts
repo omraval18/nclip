@@ -36,7 +36,7 @@ export const env = createEnv({
     DODO_PAYMENTS_ENVIRONMENT: z
       .enum(["test_mode", "live_mode"])
       .default("test_mode"),
-    DODO_PAYMENTS_RETURN_URL: z.string().url(),
+    DODO_PAYMENTS_RETURN_URL: z.url(),
   },
   /*
    * Runtime environment variables mapping

@@ -1,12 +1,12 @@
+import { env } from "../env";
 import type { BillingFormData, CheckoutResponse } from "../schema/billing";
 import { checkoutResponseSchema } from "../schema/billing";
 
-const BASE_API = import.meta.env.BASE_API
 
 export const createCheckoutSession = async (
   data: BillingFormData,
 ): Promise<{ payment_link: string }> => {
-  const response = await fetch(`${BASE_API}/api/payments/checkout`, {
+  const response = await fetch(`${env.VITE_BASE_API}/api/payments/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

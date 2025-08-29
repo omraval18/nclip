@@ -42,6 +42,7 @@ import {
 import { UploadSimpleIcon } from "@phosphor-icons/react";
 import { canCreateClip } from "@/lib/utils/credits";
 import { processClipsReqSchema } from "@/lib/schema/clips";
+import { env } from "@/lib/env";
 
 const formSchema = z.object({
   projectName: z.string().min(1, "Project name is required").max(100, "Project name must be less than 100 characters"),
@@ -170,7 +171,7 @@ export const Uploader = memo(function Uploader() {
           projectId: uploadResponse.project.id
         });
 
-        const response = await fetch(`${import.meta.env.BASE_API!}/api/clips/queue`, {
+        const response = await fetch(`${env.VITE_BASE_API}/api/clips/queue`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

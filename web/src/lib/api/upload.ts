@@ -1,9 +1,10 @@
 import { revalidateApiResponseSchema, uploadApiResponseSchema, type UploadedFileResponse, type UploadUrlRequest, type UploadUrlResponse } from "@/lib/schema/upload";
+import { env } from "../env";
 
 export { type UploadUrlRequest, type UploadUrlResponse, type UploadedFileResponse };
 
 export async function generateUploadUrl(request: UploadUrlRequest): Promise<UploadUrlResponse> {
-    const res = await fetch(`${import.meta.env.BASE_API!}/api/upload/url`, {
+    const res = await fetch(`${env.VITE_BASE_API}/api/upload/url`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -33,7 +34,7 @@ export async function generateUploadUrl(request: UploadUrlRequest): Promise<Uplo
 
 export async function revalidateUploadStatus(projectId: string): Promise<UploadedFileResponse> {
     const res = await fetch(
-        `${import.meta.env.BASE_API!}/api/upload/status/revalidate/${encodeURIComponent(projectId)}`,
+        `${env.VITE_BASE_API}/api/upload/status/revalidate/${encodeURIComponent(projectId)}`,
         {
             method: "GET",
             credentials: "include",
