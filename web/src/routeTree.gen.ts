@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BillingIndexRouteImport } from './routes/billing/index'
 import { Route as ProjectProjectIdRouteImport } from './routes/project/$projectId'
+import { Route as BillingSuccessRouteImport } from './routes/billing/success'
 
 const ProjectsRoute = ProjectsRouteImport.update({
   id: '/projects',
@@ -29,9 +31,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillingIndexRoute = BillingIndexRouteImport.update({
+  id: '/billing/',
+  path: '/billing/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectProjectIdRoute = ProjectProjectIdRouteImport.update({
   id: '/project/$projectId',
   path: '/project/$projectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingSuccessRoute = BillingSuccessRouteImport.update({
+  id: '/billing/success',
+  path: '/billing/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -39,34 +51,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/project/$projectId': typeof ProjectProjectIdRoute
+  '/billing': typeof BillingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/project/$projectId': typeof ProjectProjectIdRoute
+  '/billing': typeof BillingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/projects': typeof ProjectsRoute
+  '/billing/success': typeof BillingSuccessRoute
   '/project/$projectId': typeof ProjectProjectIdRoute
+  '/billing/': typeof BillingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/projects' | '/project/$projectId'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/projects'
+    | '/billing/success'
+    | '/project/$projectId'
+    | '/billing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/projects' | '/project/$projectId'
-  id: '__root__' | '/' | '/login' | '/projects' | '/project/$projectId'
+  to:
+    | '/'
+    | '/login'
+    | '/projects'
+    | '/billing/success'
+    | '/project/$projectId'
+    | '/billing'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/projects'
+    | '/billing/success'
+    | '/project/$projectId'
+    | '/billing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   ProjectsRoute: typeof ProjectsRoute
+  BillingSuccessRoute: typeof BillingSuccessRoute
   ProjectProjectIdRoute: typeof ProjectProjectIdRoute
+  BillingIndexRoute: typeof BillingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,11 +131,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billing/': {
+      id: '/billing/'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/project/$projectId': {
       id: '/project/$projectId'
       path: '/project/$projectId'
       fullPath: '/project/$projectId'
       preLoaderRoute: typeof ProjectProjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing/success': {
+      id: '/billing/success'
+      path: '/billing/success'
+      fullPath: '/billing/success'
+      preLoaderRoute: typeof BillingSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -106,7 +159,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   ProjectsRoute: ProjectsRoute,
+  BillingSuccessRoute: BillingSuccessRoute,
   ProjectProjectIdRoute: ProjectProjectIdRoute,
+  BillingIndexRoute: BillingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

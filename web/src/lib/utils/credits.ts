@@ -6,8 +6,8 @@ export enum UserPlan {
 
 export const PLAN_LIMITS = {
     [UserPlan.FREE]: {
-        credits: 5,
-        maxProjects: 5,
+        credits: 0,
+        maxProjects: 0,
     },
     [UserPlan.PRO]: {
         credits: 20,

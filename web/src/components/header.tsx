@@ -1,48 +1,55 @@
-import { useId } from "react"
-import {
-  HomeIcon,
-  LayersIcon,
-} from "lucide-react"
+import { useId } from "react";
+import { HomeIcon, LayersIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import UserMenu from "./user-menu";
 import { ModeToggle } from "./mode-toggle";
 import Logo from "./logo";
+import { UpgradeDialog } from "./upgrade-dialog";
+import { authClient } from "@/lib/auth-client";
+import { toUserPlan, UserPlan } from "@/lib/utils/credits";
 
 const navigationLinks = [
   { to: "/", label: "Home", icon: HomeIcon },
   { to: "/projects", label: "Projects", icon: LayersIcon },
-]
+];
 
 export default function Header() {
-  const id = useId()
-  const path = window.location.pathname
-  const isHomePage = path === "/"
+  const path = window.location.pathname;
+  const isHomePage = path === "/";
+  const { data: session, isPending } = authClient.useSession();
+  const currentUser = session?.user;
+  const plan = currentUser?.plan;
+  const isFreeUser = plan && toUserPlan(plan) === UserPlan.FREE;
 
   return (
-    <header className={cn(
-      " max-w-xl mx-auto w-full mt-2 px-4 md:px-6",
-      isHomePage ? "bg-background/40 backdrop-blur-md border border-transparent" : "bg-background border"
-    )}>
+    <header
+      className={cn(
+        " max-w-xl mx-auto w-full mt-2 px-4 md:px-6",
+        isHomePage
+          ? "bg-background/40 backdrop-blur-md border border-transparent"
+          : "bg-background border",
+      )}
+    >
       <div className="flex h-12 items-center justify-between gap-4">
         <div className="flex flex-1 items-center gap-2">
           <Popover>
@@ -83,8 +90,8 @@ export default function Header() {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => {
-                    const Icon = link.icon
-                    const isActive = path === link.to
+                    const Icon = link.icon;
+                    const isActive = path === link.to;
                     return (
                       <NavigationMenuItem key={index} className="w-full">
                         <Link to={link.to} className="w-full">
@@ -101,7 +108,7 @@ export default function Header() {
                           </NavigationMenuLink>
                         </Link>
                       </NavigationMenuItem>
-                    )
+                    );
                   })}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -115,31 +122,34 @@ export default function Header() {
               <NavigationMenuList className="gap-2">
                 <TooltipProvider>
                   {navigationLinks.map((link) => {
-                    const isActive = path === link.to
+                    const isActive = path === link.to;
                     return (
-                        <NavigationMenuItem key={link.label}>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Link to={link.to}>
-                                        <NavigationMenuLink
-                                            className={cn(
-                                                "flex size-8 items-center justify-center p-1.5",
-                                                isActive && "bg-accent text-foreground"
-                                            )}
-                                        >
-                                            <link.icon
-                                                className={cn("size-3.5", isActive && "text-foreground")}
-                                                aria-hidden="true"
-                                            />
-                                            <span className="sr-only">{link.label}</span>
-                                        </NavigationMenuLink>
-                                    </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom" className="px-2 py-1 text-xs">
-                                    <p>{link.label}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </NavigationMenuItem>
+                      <NavigationMenuItem key={link.label}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link to={link.to}>
+                              <NavigationMenuLink
+                                className={cn(
+                                  "flex size-8 items-center justify-center p-1.5",
+                                  isActive && "bg-accent text-foreground",
+                                )}
+                              >
+                                <link.icon
+                                  className={cn("size-3.5 text-foreground")}
+                                  aria-hidden="true"
+                                />
+                                <span className="sr-only">{link.label}</span>
+                              </NavigationMenuLink>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="bottom"
+                            className="px-2 py-1 text-xs"
+                          >
+                            <p>{link.label}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </NavigationMenuItem>
                     );
                   })}
                 </TooltipProvider>
@@ -148,6 +158,7 @@ export default function Header() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {isFreeUser && !isPending && <UpgradeDialog />}
           <ModeToggle />
           <UserMenu />
         </div>
@@ -155,3 +166,4 @@ export default function Header() {
     </header>
   );
 }
+

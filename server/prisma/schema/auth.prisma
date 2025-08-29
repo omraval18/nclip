@@ -9,12 +9,14 @@ model User {
   sessions      Session[]
   accounts      Account[]
   plan String @default("free")
-  credits Int @default(5)
+  credits Int @default(0)
 
 
   projects     Projects[]
   UploadedFile UploadedFile[]
   Clip         Clip[]
+  subscriptions Subscription[]
+  payments     Payment[]
 
   @@unique([email])
   @@map("user")

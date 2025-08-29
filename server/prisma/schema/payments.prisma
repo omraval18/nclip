@@ -1,0 +1,96 @@
+model Subscription {
+  id                    String    @id
+  subscriptionId        String    @unique 
+  customerId            String    
+  productId             String    
+  paymentId             String?   
+  
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  plan                  String    
+  quantity              Int       @default(1)
+  recurringPreTaxAmount Int       
+  currency              String    @default("USD")
+  
+  status                SubscriptionStatus @default(PENDING)
+  
+ 
+  nextBillingDate       DateTime?
+  previousBillingDate   DateTime?
+  expiresAt             DateTime?
+  cancelledAt           DateTime?
+  trialPeriodDays       Int       @default(0)
+  
+  
+  billingCountry        String
+  billingState          String
+  billingCity           String
+  billingStreet         String
+  billingZipcode        String
+  
+  
+  customerName          String
+  customerEmail         String
+  customerPhoneNumber   String?
+  
+ 
+  metadata              Json      @default("{}")
+  
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  payments              Payment[]
+  
+  @@map("subscriptions")
+}
+
+model Payment {
+  id              String    @id
+  paymentId       String    @unique 
+  subscriptionId  String?
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
+  
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  customerId      String    
+  amount          Int       
+  preAmount       Int       
+  tax             Int       
+  currency        String
+  
+  status          PaymentStatus
+  paymentMethod   String?   
+  cardLastFour    String?
+  cardNetwork     String?   
+  cardType        String?   
+  
+  paymentLink     String?
+  
+  
+  metadata        Json      @default("{}")
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@map("payments")
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  ON_HOLD
+  CANCELLED
+  EXPIRED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+  REFUNDED
+}

@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-import { Toggle } from "@/components/ui/toggle"
-import { MoonIcon, SunIcon } from "@phosphor-icons/react"
-import { useTheme } from "next-themes"
+import { Toggle } from "@/components/ui/toggle";
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
+import { useTheme } from "next-themes";
 
-export  function ModeToggle() {
-  const { theme,setTheme } = useTheme();
+export function ModeToggle() {
+  const { theme, setTheme } = useTheme();
 
   return (
     <div>
       <Toggle
         variant="outline"
-        className="group data-[state=on]:hover:bg-muted text-muted-foreground data-[state=on]:text-muted-foreground data-[state=on]:hover:text-foreground size-8 rounded-full border-none shadow-none data-[state=on]:bg-transparent"
+        className="group data-[state=on]:hover:bg-muted text-foreground data-[state=on]:text-foreground data-[state=on]:hover:text-foreground size-8 rounded-full border-none shadow-none data-[state=on]:bg-transparent"
         size={"sm"}
         pressed={theme === "dark"}
         onPressedChange={() =>
@@ -33,5 +33,6 @@ export  function ModeToggle() {
         />
       </Toggle>
     </div>
-  )
+  );
 }
+

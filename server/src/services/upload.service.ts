@@ -3,9 +3,17 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2 } from "@/lib/r2-client";
-import { createProjectWithInitialUpload, getProjectById } from "./project.service";
+import {
+  createProjectWithInitialUpload,
+  getProjectById,
+} from "./project.service";
 import { listS3ObjectsByPrefix } from "@/lib/utils";
-import { createUploadSchema, type CreateUploadInput, type UploadedFileResponse, type UploadUrlResponse } from "@/lib/schema";
+import {
+  createUploadSchema,
+  type CreateUploadInput,
+  type UploadedFileResponse,
+  type UploadUrlResponse,
+} from "@/lib/schema";
 import { env } from "@/env";
 
 type GenerateUploadParams = {
@@ -66,11 +74,13 @@ export async function generateUploadUrl({
       ownerId: project.ownerId,
       createdAt: project.createdAt.toISOString(),
       updatedAt: project.updatedAt.toISOString(),
-    }
+    },
   } satisfies UploadUrlResponse;
 }
 
-export async function revalidateUploadStatus(projectId: string): Promise<UploadedFileResponse> {
+export async function revalidateUploadStatus(
+  projectId: string,
+): Promise<UploadedFileResponse> {
   const project = await getProjectById(projectId);
 
   if (!project || !project.uploadedFile) {
@@ -92,7 +102,7 @@ export async function revalidateUploadStatus(projectId: string): Promise<Uploade
       });
     } else {
       finalUploadedFile = await db.uploadedFile.findUnique({
-        where: { id: uploadedFile.id }
+        where: { id: uploadedFile.id },
       });
     }
   } else {
@@ -103,7 +113,7 @@ export async function revalidateUploadStatus(projectId: string): Promise<Uploade
       });
     } else {
       finalUploadedFile = await db.uploadedFile.findUnique({
-        where: { id: uploadedFile.id }
+        where: { id: uploadedFile.id },
       });
     }
   }
@@ -117,10 +127,15 @@ export async function revalidateUploadStatus(projectId: string): Promise<Uploade
     r2Key: finalUploadedFile.r2Key,
     displayName: finalUploadedFile.displayName,
     uploaded: finalUploadedFile.uploaded,
-    status: finalUploadedFile.status as "queued" | "processing" | "completed" | "failed",
+    status: finalUploadedFile.status as
+      | "queued"
+      | "processing"
+      | "completed"
+      | "failed",
     userId: finalUploadedFile.userId,
     projectId: finalUploadedFile.projectId,
     createdAt: finalUploadedFile.createdAt.toISOString(),
     updatedAt: finalUploadedFile.updatedAt.toISOString(),
   } satisfies UploadedFileResponse;
 }
+

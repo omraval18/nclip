@@ -19,7 +19,9 @@ export const env = createEnv({
     OPENROUTER_API_KEY: z.string().min(1),
     PROCESS_VIDEO_ENDPOINT_AUTH: z.string().min(1),
     PROCESS_VIDEO_ENDPOINT: z.string().min(1),
-    NODE_ENV: z.enum(["development", "production", "test"]).default("production"),
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("production"),
     R2_REGION: z.string().default("auto"),
     R2_BUCKET_NAME: z.string().default("nclip"),
     BASE_API: z.string().url(),
@@ -29,6 +31,12 @@ export const env = createEnv({
     CLOUDFLARE_D1_TOKEN: z.string().min(1),
     CLOUDFLARE_ACCOUNT_ID: z.string().min(1),
     CLOUDFLARE_DATABASE_ID: z.string().min(1),
+    DODO_PAYMENTS_API_KEY: z.string().min(1),
+    DODO_PAYMENTS_WEBHOOK_KEY: z.string().min(1).optional(),
+    DODO_PAYMENTS_ENVIRONMENT: z
+      .enum(["test_mode", "live_mode"])
+      .default("test_mode"),
+    DODO_PAYMENTS_RETURN_URL: z.string().url(),
   },
   /*
    * Runtime environment variables mapping
@@ -57,5 +65,10 @@ export const env = createEnv({
     CLOUDFLARE_D1_TOKEN: process.env.CLOUDFLARE_D1_TOKEN,
     CLOUDFLARE_ACCOUNT_ID: process.env.CLOUDFLARE_ACCOUNT_ID,
     CLOUDFLARE_DATABASE_ID: process.env.CLOUDFLARE_DATABASE_ID,
+    DODO_PAYMENTS_API_KEY: process.env.DODO_PAYMENTS_API_KEY,
+    DODO_PAYMENTS_WEBHOOK_KEY: process.env.DODO_PAYMENTS_WEBHOOK_KEY,
+    DODO_PAYMENTS_ENVIRONMENT: process.env.DODO_PAYMENTS_ENVIRONMENT,
+    DODO_PAYMENTS_RETURN_URL: process.env.DODO_PAYMENTS_RETURN_URL,
   },
 });
+

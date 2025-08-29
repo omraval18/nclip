@@ -6,8 +6,8 @@ export enum UserPlan {
 
 export const PLAN_LIMITS = {
     [UserPlan.FREE]: {
-        credits: 5,
-        maxProjects: 5,
+        credits: 0,
+        maxProjects: 0,
     },
     [UserPlan.PRO]: {
         credits: 20,
@@ -17,6 +17,11 @@ export const PLAN_LIMITS = {
         credits: 100,
         maxProjects: -1, // for unlimited projects
     },
+} as const;
+
+export const PRODUCT_PLAN_MAPPING: Record<string, UserPlan> = {
+    "pdt_KJ8qkzP8nxQhQMXxUXR3I": UserPlan.PRO,
+    // "": UserPlan.MAX,
 } as const;
 
 export const CREDIT_COSTS = {
@@ -78,4 +83,8 @@ export function getProjectLimitMessage(currentProjects: number, plan: UserPlan):
 export function toUserPlan(str: string): UserPlan {
     if (!Object.values(UserPlan).includes(str as UserPlan)) return UserPlan.FREE;
     return str as UserPlan;
+}
+
+export function getPlanFromProductId(productId: string): UserPlan {
+    return PRODUCT_PLAN_MAPPING[productId] || UserPlan.FREE;
 }

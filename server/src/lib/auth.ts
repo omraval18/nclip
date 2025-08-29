@@ -22,7 +22,7 @@ export const auth = betterAuth({
             credits: {
                 type: "number",
                 required: true,
-                defaultValue: 5,
+                defaultValue: 0,
                 input:false
             },
         },

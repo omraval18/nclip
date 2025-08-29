@@ -34,7 +34,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/nclip-server:latest
+            ${{ secrets.DOCKER_USERNAME }}/nclip-server:v1.0.0
             ${{ secrets.DOCKER_USERNAME }}/nclip-server:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

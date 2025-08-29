@@ -8,6 +8,7 @@ import { clipRoutes } from "./routers/clip.routes";
 import { serve } from "inngest/hono";
 import { functions, inngest } from "./lib/inngest";
 import { projectRoutes } from "./routers/project.routes";
+import { paymentRoutes } from "./routers/payment.routes";
 import { env } from "./env";
 
 const app = new Hono<{
@@ -65,6 +66,7 @@ app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 app.route("/api/", uploadRoutes);
 app.route("/api/", clipRoutes);
 app.route("/api/", projectRoutes);
+app.route("/api/payments/", paymentRoutes);
 
 app.get("/", (c) => {
   return c.text("OK");
