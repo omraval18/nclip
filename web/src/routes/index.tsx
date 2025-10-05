@@ -1,3 +1,4 @@
+import Loader from "@/components/loader";
 import Dashboard from "@/components/pages/dashboard";
 import { authClient } from "@/lib/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
@@ -12,7 +13,6 @@ function RouteComponent() {
 
   const navigate = Route.useNavigate();
 
-
   useEffect(() => {
     if (!session && !isPending) {
       navigate({
@@ -22,12 +22,16 @@ function RouteComponent() {
   }, [session, isPending]);
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (
     <div>
-      <Dashboard/>
+      <Dashboard />
     </div>
   );
 }
