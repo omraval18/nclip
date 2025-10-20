@@ -27,10 +27,10 @@ export default function SignInForm({
   ...props
 }: SignInFormProps & React.ComponentProps<"div">) {
   const navigate = useNavigate({
-    from: "/",
+    from: "/login",
   });
   const { isPending } = authClient.useSession();
-  
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -68,7 +68,13 @@ export default function SignInForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 w-full justify-center items-center", className)} {...props}>
+    <div
+      className={cn(
+        "flex flex-col gap-6 w-full justify-center items-center",
+        className,
+      )}
+      {...props}
+    >
       <Card className="w-full max-w-xl">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -171,3 +177,4 @@ export default function SignInForm({
     </div>
   );
 }
+

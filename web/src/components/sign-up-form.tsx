@@ -27,10 +27,10 @@ export default function SignUpForm({
   ...props
 }: SignUpFormProps & React.ComponentProps<"div">) {
   const navigate = useNavigate({
-    from: "/",
+    from: "/login",
   });
   const { isPending } = authClient.useSession();
-  
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -71,7 +71,13 @@ export default function SignUpForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6 w-full justify-center items-center", className)} {...props}>
+    <div
+      className={cn(
+        "flex flex-col gap-6 w-full justify-center items-center",
+        className,
+      )}
+      {...props}
+    >
       <Card className="w-full max-w-xl">
         <CardHeader>
           <CardTitle>Create an account</CardTitle>
@@ -163,7 +169,9 @@ export default function SignUpForm({
                       className="w-full"
                       disabled={!state.canSubmit || state.isSubmitting}
                     >
-                      {state.isSubmitting ? "Creating Account..." : "Create Account"}
+                      {state.isSubmitting
+                        ? "Creating Account..."
+                        : "Create Account"}
                     </Button>
                     <Button variant="outline" className="w-full" type="button">
                       Sign up with Google
@@ -188,3 +196,4 @@ export default function SignUpForm({
     </div>
   );
 }
+
